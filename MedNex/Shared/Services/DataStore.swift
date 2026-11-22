@@ -100,25 +100,8 @@ final class DataStore: @unchecked Sendable {
         log.data("📡 Loading data from Supabase for user: \(userId), role: \(role.rawValue)")
         
         do {
-            switch role {
-            case .patient:
-                try await loadPatientData(userId: userId)
-            case .doctor:
-                try await loadDoctorData(userId: userId)
-            case .admin:
-                try await loadAdminData()
-            case .nurse:
-                try await loadNurseData(userId: userId)
-            case .labTechnician:
-                try await loadLabTechData()
-            case .pharmacist:
-                try await loadPharmacistData()
-            case .receptionist:
-                try await loadAdminData()
-            case .accountant:
-                try await loadAdminData()
-            }
-            
+            try await loadRoleData(userId: userId, role: role)
+
             log.data("✅ Supabase data loaded successfully")
             await MainActor.run { backendError = nil }
         } catch {
@@ -144,7 +127,39 @@ final class DataStore: @unchecked Sendable {
         #endif
     }
     
+    /// Re-fetches the signed-in user's data in place, without clearing the screen first
+    /// and without falling back to sample data. Called by RealtimeService when another
+    /// user changes something this user can see (e.g. a doctor writes a prescription).
+    func refreshFromSupabase(userId: String, role: UserRole) async {
+        #if canImport(Supabase)
+        do {
+            try await loadRoleData(userId: userId, role: role)
+            await MainActor.run { backendError = nil }
+        } catch {
+            log.warning("⚠️ Live refresh failed: \(error.localizedDescription)")
+        }
+        #endif
+    }
+
     #if canImport(Supabase)
+    /// Loads only the data this role needs. Shared by the first load and live refreshes.
+    private func loadRoleData(userId: String, role: UserRole) async throws {
+        switch role {
+        case .patient:
+            try await loadPatientData(userId: userId)
+        case .doctor:
+            try await loadDoctorData(userId: userId)
+        case .admin, .receptionist, .accountant:
+            try await loadAdminData()
+        case .nurse:
+            try await loadNurseData(userId: userId)
+        case .labTechnician:
+            try await loadLabTechData()
+        case .pharmacist:
+            try await loadPharmacistData()
+        }
+    }
+
     private func loadPatientData(userId: String) async throws {
         let repo = PatientRepository.shared
         

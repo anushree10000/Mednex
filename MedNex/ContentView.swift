@@ -88,7 +88,15 @@ struct ContentView: View {
             if isAuth, let user = appState.currentUser {
                 Task {
                     await dataStore.loadFromSupabase(userId: user.id, role: user.role)
+                    #if canImport(Supabase)
+                    // Keep screens current when other users change data
+                    await RealtimeService.shared.start(userId: user.id, role: user.role)
+                    #endif
                 }
+            } else if !isAuth {
+                #if canImport(Supabase)
+                Task { await RealtimeService.shared.stop() }
+                #endif
             }
         }
         // Offline banner

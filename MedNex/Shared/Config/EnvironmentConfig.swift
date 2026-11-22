@@ -31,18 +31,18 @@ enum EnvironmentConfig {
     static var supabaseURL: String {
         switch AppEnvironment.current {
         case .debug, .staging:
-            return "https://eqigjryyhjwimadhzxzp.supabase.co"
+            return "https://xkgpsoywahhvgrfaxeaa.supabase.co"
         case .production:
-            return "https://eqigjryyhjwimadhzxzp.supabase.co"
+            return "https://xkgpsoywahhvgrfaxeaa.supabase.co"
         }
     }
     
     static var supabaseAnonKey: String {
         switch AppEnvironment.current {
         case .debug, .staging:
-            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxaWdqcnl5aGp3aW1hZGh6eHpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMTkyNTQsImV4cCI6MjA4ODc5NTI1NH0.9GkcBxvSgjsNpJy2yhg46dPTSNI7DkLgXOcdgSKWE0w"
+            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrZ3Bzb3l3YWhodmdyZmF4ZWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNzc3ODgsImV4cCI6MjExMDk1Mzc4OH0.UEz1loy_GgdrOXy0XdyUzJcMV_JzN4xPM0ZKAjLfgY4"
         case .production:
-            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxaWdqcnl5aGp3aW1hZGh6eHpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMTkyNTQsImV4cCI6MjA4ODc5NTI1NH0.9GkcBxvSgjsNpJy2yhg46dPTSNI7DkLgXOcdgSKWE0w"
+            return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrZ3Bzb3l3YWhodmdyZmF4ZWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNzc3ODgsImV4cCI6MjExMDk1Mzc4OH0.UEz1loy_GgdrOXy0XdyUzJcMV_JzN4xPM0ZKAjLfgY4"
         }
     }
     

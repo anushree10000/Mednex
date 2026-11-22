@@ -27,7 +27,7 @@ This turns on real role-based security in the database and live updates in the a
 ## 1. Trust Firebase logins in Supabase
 
 1. In the Supabase dashboard, open **Authentication** settings, find the **Third-Party Auth** section, and add a **Firebase** integration.
-2. Enter the Firebase project ID: `mednex-56348`.
+2. Enter the Firebase project ID: `mednex-4ab3f`.
 
 ## 2. Add the role claim to Firebase tokens
 
@@ -40,7 +40,7 @@ Supabase uses the `role` claim in the token to decide which database role a requ
 
 ```bash
 cd firebase/functions && npm install && cd ..
-firebase deploy --only functions --project mednex-56348
+firebase deploy --only functions --project mednex-4ab3f
 ```
 
 Every new sign-up and sign-in then gets the claim automatically.

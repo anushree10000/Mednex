@@ -58,9 +58,9 @@ $$;
 CREATE OR REPLACE FUNCTION app_private.trusted_jwt()
 RETURNS BOOLEAN LANGUAGE sql STABLE SET search_path = '' AS $$
     SELECT coalesce(
-        (    auth.jwt() ->> 'iss' = 'https://securetoken.google.com/mednex-56348'
-         AND auth.jwt() ->> 'aud' = 'mednex-56348')
-        OR auth.jwt() ->> 'iss' = 'https://eqigjryyhjwimadhzxzp.supabase.co/auth/v1',
+        (    auth.jwt() ->> 'iss' = 'https://securetoken.google.com/mednex-4ab3f'
+         AND auth.jwt() ->> 'aud' = 'mednex-4ab3f')
+        OR auth.jwt() ->> 'iss' = 'https://xkgpsoywahhvgrfaxeaa.supabase.co/auth/v1',
         false)
 $$;
 

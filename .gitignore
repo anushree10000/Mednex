@@ -7,3 +7,7 @@ build/
 # macOS
 .DS_Store
 __MACOSX/
+
+# Firebase
+firebase/functions/node_modules/
+*service-account*.json

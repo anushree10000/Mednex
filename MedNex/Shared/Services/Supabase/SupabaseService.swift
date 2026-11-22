@@ -9,17 +9,35 @@
 import Foundation
 import Supabase
 import PostgREST
+#if canImport(FirebaseAuth)
+import FirebaseAuth
+#endif
 
 final class SupabaseService: @unchecked Sendable {
     static let shared = SupabaseService()
-    
+
     let client: SupabaseClient
     private let log = LoggingService.shared
-    
+
     private init() {
         client = SupabaseClient(
             supabaseURL: URL(string: EnvironmentConfig.supabaseURL)!,
-            supabaseKey: EnvironmentConfig.supabaseAnonKey
+            supabaseKey: EnvironmentConfig.supabaseAnonKey,
+            options: SupabaseClientOptions(
+                auth: .init(accessToken: {
+                    // Firebase third-party auth: every request (REST and realtime) carries
+                    // the signed-in user's Firebase ID token, so row-level security in
+                    // the database knows who is asking. Before login this returns nil and
+                    // the request goes out with the public key only.
+                    // See schema_migration_v6_security_realtime.sql and SECURITY_SETUP.md.
+                    #if canImport(FirebaseAuth)
+                    // Module-qualified: the Supabase SDK also exports a module named `Auth`.
+                    return try await FirebaseAuth.Auth.auth().currentUser?.getIDToken()
+                    #else
+                    return nil
+                    #endif
+                })
+            )
         )
     }
     
@@ -46,10 +64,13 @@ final class SupabaseService: @unchecked Sendable {
     
     func fetchStaffEmail(byStaffId staffId: String) async throws -> String {
         log.data("Looking up staff by ID: \(staffId)")
-        struct StaffEmailResult: Decodable { let email: String }
-        let result: StaffEmailResult = try await client
-            .from("staff").select("email").eq("id", value: staffId).single().execute().value
-        return result.email
+        // Runs before login, so it can't read the staff table directly (RLS blocks it).
+        // The staff_email_for_id database function returns only the email for that ID.
+        let email: String = try await client
+            .rpc("staff_email_for_id", params: ["p_staff_id": staffId])
+            .execute()
+            .value
+        return email
     }
     
     // MARK: - Generic CRUD

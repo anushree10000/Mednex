@@ -26,10 +26,10 @@ struct MedNexApp: App {
         
         // One-time demo seeding (DEBUG only)
         #if DEBUG && canImport(FirebaseAuth)
-        if !UserDefaults.standard.bool(forKey: "mednex_demo_seeded") {
+        if !UserDefaults.standard.bool(forKey: "mednex_demo_seeded_v2") {
             Task {
                 await SeedDataService.shared.seedAllDemoAccounts()
-                UserDefaults.standard.set(true, forKey: "mednex_demo_seeded")
+                UserDefaults.standard.set(true, forKey: "mednex_demo_seeded_v2")
             }
         }
         #endif

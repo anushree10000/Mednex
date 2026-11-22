@@ -5,7 +5,7 @@ An iOS hospital-management app for 8 roles (patient, doctor, nurse, lab technici
 ## Tech stack
 
 - SwiftUI (iOS 26.2+), MVVM with protocol-based services
-- Supabase (PostgreSQL, row-level security, Realtime) for hospital data
+- Supabase (PostgreSQL, row-level security, Realtime) for hospital data, with Firebase logins trusted through Supabase third-party auth (see [SECURITY_SETUP.md](SECURITY_SETUP.md))
 - Firebase Auth for login, plus email OTP and Face ID
 - Stripe PaymentSheet (test mode) for bill payments
 - App Intents / Siri Shortcuts
@@ -20,7 +20,8 @@ An iOS hospital-management app for 8 roles (patient, doctor, nurse, lab technici
 | `MedNex/Features` | One folder per role: Admin, Doctor, Nurse, LabTech, Patient, Pharmacist |
 | `MedNex/Shared` | Models, services (Supabase, Firebase, Stripe, cache, security), components, design system |
 | `MednexTests` | XCTest unit tests, run with `./run_tests.sh` |
-| `*.sql` | Supabase schema, migrations, RLS policies and seed data |
+| `*.sql` | Supabase schema, migrations, RLS policies and seed data. `schema_migration_v6_security_realtime.sql` switches on role-based security |
+| `firebase/` | Firebase functions and a script that add the token claim Supabase needs |
 
 ## Run it
 

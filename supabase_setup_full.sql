@@ -1285,3 +1285,18 @@ SELECT COUNT(*) AS inventory_items FROM inventory_items;
 SELECT COUNT(*) AS beds FROM beds;
 SELECT COUNT(*) AS shifts FROM shifts;
 SELECT COUNT(*) AS time_slots FROM time_slots;
+
+
+-- ############################################################
+-- ## Staff-ID login helper (the app calls this RPC before sign-in)
+-- ## Also created by schema_migration_v6; defined here so staff-ID
+-- ## login works before security is switched on.
+-- ############################################################
+
+CREATE OR REPLACE FUNCTION public.staff_email_for_id(p_staff_id TEXT)
+RETURNS TEXT LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '' AS $$
+    SELECT s.email FROM public.staff s
+    WHERE s.id = p_staff_id AND coalesce(s.is_active, true)
+$$;
+REVOKE ALL ON FUNCTION public.staff_email_for_id(TEXT) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.staff_email_for_id(TEXT) TO anon, authenticated;
